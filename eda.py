@@ -8,6 +8,7 @@ plt.style.use('ggplot')
 
 # Loads csv file
 df = pd.read_csv('train.csv')
+df_test = pd.read_csv('test.csv')
 
 # Sets max visible number of columns 
 pd.set_option('display.max_columns', 200)
@@ -33,16 +34,46 @@ df = df[['PassengerId', 'Survived', 'Pclass',
         # 'Cabin',
         'Embarked']].copy()
 
+df_test = df_test[['PassengerId', 'Pclass',
+        #  'Name',
+         'Sex', 'Age', 'SibSp', 'Parch',
+       'Ticket', 'Fare', 
+        # 'Cabin',
+        'Embarked']].copy()
+
 df['Family_Count'] = df['SibSp'] + df['Parch']
+
+df_test['Family_Count'] = df['SibSp'] + df['Parch']
+
+df['Sex'] = df['Sex'].replace({'male': 1, 'female': 0})
+
+df_test['Sex'] = df_test['Sex'].replace({'male' : 1, 'female': 0})
+
+# For Label Encoding and Preserving Priority order
+# Remap the values
+remap = {1: 3, 2: 2, 3: 1}
+
+df['Pclass'] = df['Pclass'].map(remap)
+
+df_test['Pclass'] = df_test['Pclass'].map(remap)
+
+# Replace NaN in 'Age' with average (mean) age
+mean_age = df['Age'].mean()
+df['Age'] = df['Age'].fillna(mean_age)
+
+df_test['Age'] = df['Age'].fillna(mean_age)
+
+mean_fare = df['Fare'].mean()
+df_test['Fare'] = df_test['Fare'].fillna(mean_fare)
 
 # prefixes = set(df['Cabin'].str[:1].tolist())
 # print(prefixes)
 
 # Column datatype change
-# df['Survived'] = df['Survived'].astype(bool)
+df['Survived'] = df['Survived'].astype(int)
 
 # Check null values
-# print(df.isna().sum())
+# print(df_test.isna().sum())
 
 # Check duplicates
 # print(df.loc[df.duplicated()])
@@ -54,7 +85,12 @@ df['Family_Count'] = df['SibSp'] + df['Parch']
 # plt.grid(True)
 # plt.show()
 
+# Export to CSV
+df.to_csv('updated_train.csv', index=False)
+df_test.to_csv('updated_test.csv', index = False)
 
-print(df.head(5))
+# print(df.head(5))
+
+
 
 
