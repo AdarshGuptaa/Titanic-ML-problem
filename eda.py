@@ -66,6 +66,15 @@ df_test['Age'] = df['Age'].fillna(mean_age)
 mean_fare = df['Fare'].mean()
 df_test['Fare'] = df_test['Fare'].fillna(mean_fare)
 
+df = pd.get_dummies(df, columns=['Embarked'], drop_first = True)
+df_test = pd.get_dummies(df_test, columns=['Embarked'], drop_first = True)
+
+df['Embarked_Q'] = df['Embarked_Q'].astype(int)
+df['Embarked_S'] = df['Embarked_S'].astype(int)
+
+df_test['Embarked_Q'] = df_test['Embarked_Q'].astype(int)
+df_test['Embarked_S'] = df_test['Embarked_S'].astype(int)
+
 # prefixes = set(df['Cabin'].str[:1].tolist())
 # print(prefixes)
 
